@@ -7,7 +7,7 @@
     Rounds a number to the nearest TF2 server tick
 */
 double tickRound(double d) {
-    return round(d / SECONDS_PER_TICK) *  SECONDS_PER_TICK;
+    return round(d / SECONDS_PER_TICK) * SECONDS_PER_TICK;
 }
 
 
@@ -44,10 +44,11 @@ void Weapon::setWeaponName(string s) {
 
 
 /*
-    Changes base damage by a percentage
+    Changes base damage by a percentage,
+    rounded to the nearest integer
 */
 void Weapon::modifyBaseDamage(int m) {
-    baseDamage *= (1 + m/100.0);
+    baseDamage = round(baseDamage * (1 + m/100.0));
 }
 
 
@@ -91,9 +92,9 @@ double Weapon::getDPS() {
     clip size, first reload time, and consecutive reload time.
     Can either fully reload entire clip at once or load it one ammo at a time.
 */
-ClippedWeapon::ClippedWeapon(string name, double damage, double atkInt,
-    int pelletCount, int clipNum, double firstReload,
-    double conscReload, bool fullyReloads) :
+ClippedWeapon::ClippedWeapon(
+    string name, double damage, double atkInt, int pelletCount,
+    int clipNum, double firstReload, double conscReload, bool fullyReloads):
     Weapon(name, damage, atkInt, pelletCount) {
         clipSize = clipNum;
         reloadTimeFirst = firstReload;
@@ -131,7 +132,7 @@ void ClippedWeapon::modifyClipSize(int m) {
 
 
 /*
-    Changes first and, if applicable, consecutive reload times by a percentage,
+    Changes first and consecutive reload times by a percentage,
     rounded to the nearest server tick
 */
 void ClippedWeapon::modifyReload(int m) {
