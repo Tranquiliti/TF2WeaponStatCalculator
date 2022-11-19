@@ -52,8 +52,7 @@ int main() {
     babyFace.setWeaponName("Baby Face's Blaster");
     babyFace.modifyBaseDamage(-40);
     babyFace.modifyAttackInterval(70);
-    babyFace.modifyReload(60);
-    babyFace.modifyClipSize(-34);
+    babyFace.modifyReload(65);
     cout<<babyFace.getWeaponStats() + "\n";
 
     // Back Scatter
@@ -113,6 +112,13 @@ int main() {
     directHit.modifyBaseDamage(25);
     directHit.modifyClipSize(50);
     cout<<directHit.getWeaponStats() + "\n";
+
+    // Black Box
+    RocketLauncher blackBox;
+    blackBox.setWeaponName("Black Box");
+    blackBox.modifyClipSize(50);
+    blackBox.modifyClipSize(-25);
+    cout<<blackBox.getWeaponStats() + "\n";
 
     // Liberty Launcher
     RocketLauncher liberty;
@@ -176,10 +182,36 @@ int main() {
     iDid.modifyReload(50);
     cout<<iDid.getWeaponStats() + "\n";
 
+    // Loch-N-Load
+    GrenadeLauncher lnl;
+    lnl.setWeaponName("Loch-N-Load");
+    lnl.modifyReload(50);
+    lnl.modifyAttackInterval(25);
+    cout<<lnl.getWeaponStats() + "\n";
+
     // Stickybomb Launcher
     StickybombLauncher itLikeThis;
     itLikeThis.modifyReload(50);
     cout<<itLikeThis.getWeaponStats() + "\n";
+
+    // Scottish Resistance
+    StickybombLauncher scottish;
+    scottish.setWeaponName("Scottish Resistance");
+    scottish.modifyBaseDamage(10);
+    scottish.modifyClipSize(50);
+    scottish.modifyAttackInterval(50);
+    scottish.modifyReload(35);
+    cout<<scottish.getWeaponStats() + "\n";
+
+    // Quickiebomb Launcher
+    StickybombLauncher quickie;
+    quickie.setWeaponName("Quickiebomb Launcher");
+    quickie.modifyClipSize(50);
+    quickie.modifyAttackInterval(40);
+    quickie.modifyReload(20);
+    quickie.modifyBaseDamage(-5);
+    quickie.modifyClipSize(-50);
+    cout<<quickie.getWeaponStats() + "\n";
     
     // Minigun
     Minigun hoovy;
@@ -206,6 +238,14 @@ int main() {
     tomi.setWeaponName("Tomislav");
     tomi.modifyAttackInterval(-25);
     cout<<tomi.getWeaponStats() + "\n";
+
+    // Huo-Long Heater
+    Minigun heater;
+    heater.setWeaponName("Huo-Long Heater");
+    heater.modifyAttackInterval(25);
+    heater.modifyPelletCount(25);
+    heater.modifyBaseDamage(-20);
+    cout<<heater.getWeaponStats() + "\n";
 
     // Family Business
     Shotgun family;
@@ -264,6 +304,15 @@ int main() {
     bluts.modifyAttackInterval(15);
     bluts.modifyReload(-75);
     cout<<bluts.getWeaponStats() + "\n";
+
+    // Overdose
+    SyringeGun overdose;
+    overdose.setWeaponName("Overdose");
+    overdose.modifyBaseDamage(100);
+    overdose.modifyClipSize(50);
+    overdose.modifyAttackInterval(-15);
+    overdose.modifyReload(-25);
+    cout<<overdose.getWeaponStats() + "\n";
     
     // Revolver
     Revolver ocelot;
@@ -282,6 +331,14 @@ int main() {
     amby.modifyReload(-50);
     cout<<amby.getWeaponStats() + "\n";
 
+    // L'Etranger
+    Revolver letr;
+    letr.setWeaponName("L\'Etranger");
+    letr.modifyClipSize(300);
+    letr.modifyAttackInterval(75);
+    letr.modifyBaseDamage(-20);
+    cout<<letr.getWeaponStats() + "\n";
+
     // Enforcer
     Revolver enforcer;
     enforcer.setWeaponName("Enforcer");
@@ -289,7 +346,15 @@ int main() {
     enforcer.modifyPelletCount(300);
     enforcer.modifyBaseDamage(-80);
     enforcer.modifyAttackInterval(75);
-    cout<<enforcer.getWeaponStats();
+    cout<<enforcer.getWeaponStats() + "\n";
+
+    // Diamondback
+    Revolver diamond;
+    diamond.setWeaponName("Diamondback");
+    diamond.modifyClipSize(300);
+    diamond.modifyAttackInterval(75);
+    diamond.modifyBaseDamage(-15);
+    cout<<diamond.getWeaponStats();
 
     return 0;
 }
