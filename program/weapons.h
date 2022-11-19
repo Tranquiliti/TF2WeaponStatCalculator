@@ -23,7 +23,7 @@ class Weapon {
         double attackInterval; // in seconds
         int numOfPellets;
         
-        Weapon(){};
+        Weapon();
     
     public:
         Weapon(string,double,double,int);
@@ -52,7 +52,7 @@ class ClippedWeapon: public Weapon {
         double reloadTimeConsecutive; // in seconds
         bool doesFullReload;
         
-        ClippedWeapon(){};
+        ClippedWeapon();
         
     public:
         ClippedWeapon(string,double,double,int,int,double,double,bool);
@@ -72,8 +72,26 @@ class ClippedWeapon: public Weapon {
 
 
 /*
+    Scattergun used by a dumb Scout
+*/
+class Scattergun: public ClippedWeapon {
+    public:
+        Scattergun() {
+            weaponName = "Scattergun";
+            baseDamage = 6;
+            numOfPellets = 10;
+            attackInterval = 0.625; // ~42 ticks
+            clipSize = 6;
+            reloadTimeFirst = 0.7; // ~47 ticks for Soldier
+            reloadTimeConsecutive = 0.5; // ~33 ticks
+            doesFullReload = false;
+        }
+};
+
+
+/*
     Pistol used by Scout and Engineer
-    (Scout reloads his Pistol a few ticks faster, but it's not very noticeable)
+    (Scout reloads his Pistol a few ticks faster, but it's not noticeable)
 */
 class Pistol: public ClippedWeapon {
     public:
@@ -90,15 +108,33 @@ class Pistol: public ClippedWeapon {
 
 
 /*
+    Rocket Launcher used by the patriotic Soldier
+*/
+class RocketLauncher: public ClippedWeapon {
+    public:
+        RocketLauncher() {
+            weaponName = "Rocket Launcher";
+            baseDamage = 90;
+            numOfPellets = 1;
+            attackInterval = 0.8; // ~53 ticks
+            clipSize = 4;
+            reloadTimeFirst = 0.92; // ~61 ticks
+            reloadTimeConsecutive = 0.8; // ~53 ticks
+            doesFullReload = false;
+        }
+};
+
+
+/*
     Shotgun used by Soldier, Pyro, Heavy, and Engineer.
     (First reload time differs slightly for each class, but
     it's usually too insignificant to consider)
 */
-class ShotgunGeneric: public ClippedWeapon {
+class Shotgun: public ClippedWeapon {
     public:
-        ShotgunGeneric() {
+        Shotgun() {
             weaponName = "Shotgun";
-            baseDamage = 6.0;
+            baseDamage = 6;
             numOfPellets = 10;
             attackInterval = 0.625; // ~42 ticks
             clipSize = 6;
@@ -125,13 +161,49 @@ class Shovel: public Weapon {
 
 
 /*
+    Grenade Launcher used by a drunk Demoman
+*/
+class GrenadeLauncher: public ClippedWeapon {
+    public:
+        GrenadeLauncher() {
+            weaponName = "Grenade Launcher";
+            baseDamage = 100;
+            numOfPellets = 1;
+            attackInterval = 0.6; // 40 ticks
+            clipSize = 4;
+            reloadTimeFirst = 1.24; // ~83 ticks
+            reloadTimeConsecutive = 0.6; // 40 ticks
+            doesFullReload = false;
+        }
+};
+
+
+/*
+    Stickybomb Launcher used by a drunk, Scottish Demoman
+*/
+class StickybombLauncher: public ClippedWeapon {
+    public:
+        StickybombLauncher() {
+            weaponName = "Stickybomb Launcher";
+            baseDamage = 120;
+            numOfPellets = 1;
+            attackInterval = 0.6; // 40 ticks
+            clipSize = 8;
+            reloadTimeFirst = 1.09; // ~73 ticks
+            reloadTimeConsecutive = 0.67; // ~45 ticks
+            doesFullReload = false;
+        }
+};
+
+
+/*
     Heavy Minigun
 */
 class Minigun: public Weapon {
     public:
         Minigun() {
             weaponName = "Minigun";
-            baseDamage = 9.0;
+            baseDamage = 9;
             numOfPellets = 4;
             attackInterval = 0.105; // 7 ticks
         }
