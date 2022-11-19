@@ -11,6 +11,10 @@ double tickRound(double d) {
 }
 
 
+// Default constructor
+Weapon::Weapon() {}
+
+
 /*
     Constructs a Weapon with a name, base damage,
     attack interval, and pellet count
@@ -38,6 +42,10 @@ int Weapon::getPelletCount(){
 }
 
 
+
+/*
+    Sets this Weapon's name to a specified name
+*/
 void Weapon::setWeaponName(string s) {
     weaponName = s;
 }
@@ -85,6 +93,10 @@ string Weapon::getWeaponStats() {
 double Weapon::getDPS() {
     return baseDamage * numOfPellets / attackInterval;
 }
+
+
+// Default constructor
+ClippedWeapon::ClippedWeapon() {}
 
 
 /*
