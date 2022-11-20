@@ -3,27 +3,20 @@
 #include "weapons.h"
 
 
-/*
-    Rounds a number to the nearest TF2 server tick
-*/
-double tickRound(double d) {
-    return round(d / SECONDS_PER_TICK) * SECONDS_PER_TICK;
+double tickRound(double num) {
+    return round(num / SECONDS_PER_TICK) * SECONDS_PER_TICK;
 }
 
 
-// Default constructor
 Weapon::Weapon() {}
 
 
-/*
-    Constructs a Weapon with a name, base damage,
-    attack interval, and pellet count
-*/
-Weapon::Weapon(string name, double damage, double atkInt, int pelletCount) {
-    weaponName = name;
-    baseDamage = damage;
-    attackInterval = atkInt;
-    numOfPellets = pelletCount;
+Weapon::Weapon(string weaponName, double baseDamage,
+               double attackInterval, int pelletCount) {
+    this->weaponName = weaponName;
+    this->baseDamage = baseDamage;
+    this->attackInterval = attackInterval;
+    this->pelletCount = pelletCount;
 }
 
 
@@ -38,80 +31,56 @@ double Weapon::getAttackInterval() {
 
 
 int Weapon::getPelletCount(){
-    return numOfPellets;
+    return pelletCount;
 }
 
 
-
-/*
-    Sets this Weapon's name to a specified name
-*/
-void Weapon::setWeaponName(string s) {
-    weaponName = s;
+void Weapon::setWeaponName(string newName) {
+    weaponName = newName;
 }
 
 
-/*
-    Changes base damage by a percentage,
-    rounded to the nearest integer
-*/
-void Weapon::modifyBaseDamage(int m) {
-    baseDamage = round(baseDamage * (1 + m/100.0));
+void Weapon::modifyBaseDamage(int percent) {
+    baseDamage = round(baseDamage * (1 + percent/100.0));
 }
 
 
-/*
-    Changes attack interval by a percentage,
-    rounded to the nearest server tick
-*/
-void Weapon::modifyAttackInterval(int m) {
+void Weapon::modifyAttackInterval(int percent) {
     attackInterval = 
-        tickRound(attackInterval * (1 - m/100.0));
+        tickRound(attackInterval * (1 - percent/100.0));
 }
 
 
-/*
-    Changes pellet count by a percentage,
-    rounded down to an integer
-*/
-void Weapon::modifyPelletCount(int m) {
-    numOfPellets = floor(numOfPellets * (1 + m/100.0));
+void Weapon::modifyPelletCount(int percent) {
+    pelletCount = floor(pelletCount * (1 + percent/100.0));
 }
 
 
 string Weapon::getWeaponStats() {
     return "--- " + weaponName +
-        " ---\nDamage per shot: " + to_string(baseDamage * numOfPellets) +
+        " ---\nDamage per shot: " + to_string(baseDamage * pelletCount) +
         "\nAttack Interval: " + to_string(attackInterval) +
         "\nNonstop DPS: " + to_string(getDPS()) + "\n";
 }
 
 
-/*
-    Returns the Weapon DPS, assuming nonstop DPS
-*/
 double Weapon::getDPS() {
-    return baseDamage * numOfPellets / attackInterval;
+    return baseDamage * pelletCount / attackInterval;
 }
 
 
-// Default constructor
 ClippedWeapon::ClippedWeapon() {}
 
 
-/*
-    Constructs a Weapon with a name, base damage, attack interval,pellet count,
-    clip size, first reload time, and consecutive reload time.
-    Can either fully reload entire clip at once or load it one ammo at a time.
-*/
-ClippedWeapon::ClippedWeapon(
-    string name, double damage, double atkInt, int pelletCount,
-    int clipNum, double firstReload, double conscReload, bool fullyReloads):
-    Weapon(name, damage, atkInt, pelletCount) {
-        clipSize = clipNum;
-        reloadTimeFirst = firstReload;
-        reloadTimeConsecutive = conscReload;
-        doesFullReload = fullyReloads;
+ClippedWeapon::ClippedWeapon(string weaponName, double baseDamage,
+                             double attackInterval, int pelletCount,
+                             int clipSize, double reloadFirst,
+                             double reloadConsecutive, bool doesFullReload):
+    Weapon(weaponName, baseDamage, attackInterval, pelletCount) {
+        this->clipSize = clipSize;
+        this->reloadFirst = reloadFirst;
+        this->reloadConsecutive = reloadConsecutive;
+        this->doesFullReload = doesFullReload;
 }
 
 
@@ -121,44 +90,33 @@ double ClippedWeapon::getClipSize() {
 
 
 double ClippedWeapon::getFirstReload() {
-    return reloadTimeFirst;
+    return reloadFirst;
 }
 
 
-/*
-    Returns the reload time of consecutive rounds
-    If weapon fully reloads every clip, returns 0 instead
-*/
 double ClippedWeapon::getConsecutiveReload() {
-    return doesFullReload ? 0 : reloadTimeConsecutive;
+    return doesFullReload ? 0 : reloadConsecutive;
 }
 
 
-/*
-    Changes clip size by a percentage,
-    rounded to the nearest integer
-*/
-void ClippedWeapon::modifyClipSize(int m) {
-    clipSize = round(clipSize * (1 + m/100.0));
+void ClippedWeapon::modifyClipSize(int percent) {
+    clipSize = percent < 0 ? round(clipSize * (1 + percent/100.0)) :
+        floor(clipSize * (1 + percent/100.0));
 }
 
 
-/*
-    Changes first and consecutive reload times by a percentage,
-    rounded to the nearest server tick
-*/
-void ClippedWeapon::modifyReload(int m) {
-    double multiplier = (1 - m/100.0);
-    reloadTimeFirst = tickRound(reloadTimeFirst * multiplier);
-    reloadTimeConsecutive = tickRound(reloadTimeConsecutive * multiplier);
+void ClippedWeapon::modifyReload(int percent) {
+    double mult = (1 - percent/100.0);
+    reloadFirst = tickRound(reloadFirst * mult);
+    reloadConsecutive = tickRound(reloadConsecutive * mult);
 }
 
 
 string ClippedWeapon::getWeaponStats() {
     string reloadStat = doesFullReload ?
-        "\nReload Time: " + to_string(reloadTimeFirst) :
-        "\nReload Time (First): " + to_string(reloadTimeFirst) +
-        "\nReload Time (Consecutive): " + to_string(reloadTimeConsecutive) +
+        "\nReload: " + to_string(reloadFirst) :
+        "\nReload (First): " + to_string(reloadFirst) +
+        "\nReload (Consecutive): " + to_string(reloadConsecutive) +
         "\nTime to Full Reload: " + to_string(getFullReloadTime());
     return Weapon::getWeaponStats() +
         "Clip Size: " + to_string(clipSize) +
@@ -168,26 +126,17 @@ string ClippedWeapon::getWeaponStats() {
 }
 
 
-/*
-    Returns the time to empty this Weapon's clip
-*/
 double ClippedWeapon::getEmptyClipTime() {
     return attackInterval * clipSize;
 }
 
 
-/*
-    Returns the time to fully reload this Weapon
-*/
 double ClippedWeapon::getFullReloadTime() {
-    return doesFullReload ? reloadTimeFirst :
-        reloadTimeFirst + reloadTimeConsecutive * (clipSize - 1);
+    return doesFullReload ? reloadFirst :
+        reloadFirst + reloadConsecutive * (clipSize - 1);
 }
 
 
-/*
-    Returns the Weapon DPS, taking reloading into account
-*/
 double ClippedWeapon::getRealDPS() {
     double emptyTime = getEmptyClipTime();
     return Weapon::getDPS() * (emptyTime/(emptyTime+getFullReloadTime()));
