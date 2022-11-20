@@ -10,7 +10,10 @@ using namespace std;
 const double SECONDS_PER_TICK = 0.015;
 
 
-double tickRound(double);
+/*
+    Rounds a number to the nearest TF2 server tick
+*/
+double tickRound(double num);
 
 
 /*
@@ -19,25 +22,48 @@ double tickRound(double);
 class Weapon {
     protected:
         string weaponName;
-        double baseDamage;
+        double baseDamage; // per pellet
         double attackInterval; // in seconds
-        int numOfPellets;
+        int    pelletCount;
         
         Weapon();
     
     public:
-        Weapon(string,double,double,int);
+        /*
+            Constructs a Weapon with specified stats
+        */
+        Weapon(string weaponName, double baseDamage,
+               double attackInterval, int pelletCount);
 
         double getBaseDamage();
         double getAttackInterval();
-        int getPelletCount();
+        int    getPelletCount();
+
+        void setWeaponName(string newName);
+
+        /*
+            Changes base damage by a percentage,
+            rounded to the nearest integer
+        */
+        void modifyBaseDamage(int percent);
+
+        /*
+            Changes attack interval by a percentage,
+            rounded to the nearest server tick
+        */
+        void modifyAttackInterval(int percent);
         
-        void setWeaponName(string);
-        void modifyBaseDamage(int);
-        void modifyAttackInterval(int);
-        void modifyPelletCount(int);
+        /*
+            Changes pellet count by a percentage,
+            rounded down to an integer
+        */
+        void modifyPelletCount(int percent);
         
         string getWeaponStats();
+
+        /*
+            Returns this Weapon's DPS, assuming nonstop firing
+        */
         double getDPS();
 };
 
@@ -47,26 +73,54 @@ class Weapon {
 */
 class ClippedWeapon: public Weapon {
     protected:
-        int clipSize;
-        double reloadTimeFirst; // in seconds
-        double reloadTimeConsecutive; // in seconds
-        bool doesFullReload;
+        int    clipSize;
+        double reloadFirst; // in seconds
+        double reloadConsecutive; // in seconds
+        bool   doesFullReload;
         
         ClippedWeapon();
         
     public:
-        ClippedWeapon(string,double,double,int,int,double,double,bool);
+        /*
+            Constructs a clipped Weapon with specified stats
+        */
+        ClippedWeapon(string weaponName, double baseDamage,
+                      double attackInterval, int pelletCount,
+                      int clipSize, double reloadFirst,
+                      double reloadConsecutive, bool doesFullReload);
 
         double getClipSize();
         double getFirstReload();
-        double getConsecutiveReload();
+        double getConsecutiveReload(); // Returns 0 if weapon does full reloads
         
-        void modifyClipSize(int);
-        void modifyReload(int);
+        /*
+            Changes clip size by a percentage,
+            rounded to the nearest integer if percent m is negative
+            or rounded down if percent m is positive
+        */
+        void modifyClipSize(int percent);
+
+        /*
+            Changes first and consecutive reload times by a percentage,
+            rounded to the nearest server tick
+        */
+        void modifyReload(int percent);
         
         string getWeaponStats();
+
+        /*
+            Returns the time (in seconds) to empty this Weapon's clip
+        */
         double getEmptyClipTime();
+
+        /*
+            Returns the time (in seconds) to fully reload this Weapon
+        */
         double getFullReloadTime();
+
+        /*
+            Returns this Weapon's DPS, taking reloading into account
+        */
         double getRealDPS();
 };
 
@@ -79,11 +133,11 @@ class Scattergun: public ClippedWeapon {
         Scattergun() {
             weaponName = "Scattergun";
             baseDamage = 6;
-            numOfPellets = 10;
+            pelletCount = 10;
             attackInterval = 0.625; // ~42 ticks
             clipSize = 6;
-            reloadTimeFirst = 0.7; // ~47 ticks for Soldier
-            reloadTimeConsecutive = 0.5; // ~33 ticks
+            reloadFirst = 0.7; // ~47 ticks for Soldier
+            reloadConsecutive = 0.5; // ~33 ticks
             doesFullReload = false;
         }
 };
@@ -98,10 +152,10 @@ class Pistol: public ClippedWeapon {
         Pistol() {
             weaponName = "Pistol";
             baseDamage = 15;
-            numOfPellets = 1;
+            pelletCount = 1;
             attackInterval = 0.15; // 10 ticks
             clipSize = 12;
-            reloadTimeFirst = 1.035; // 69 ticks for Engineer
+            reloadFirst = 1.035; // 69 ticks for Engineer
             doesFullReload = true;
         }
 };
@@ -115,11 +169,11 @@ class RocketLauncher: public ClippedWeapon {
         RocketLauncher() {
             weaponName = "Rocket Launcher";
             baseDamage = 90;
-            numOfPellets = 1;
+            pelletCount = 1;
             attackInterval = 0.8; // ~53 ticks
             clipSize = 4;
-            reloadTimeFirst = 0.92; // ~61 ticks
-            reloadTimeConsecutive = 0.8; // ~53 ticks
+            reloadFirst = 0.92; // ~61 ticks
+            reloadConsecutive = 0.8; // ~53 ticks
             doesFullReload = false;
         }
 };
@@ -135,11 +189,11 @@ class Shotgun: public ClippedWeapon {
         Shotgun() {
             weaponName = "Shotgun";
             baseDamage = 6;
-            numOfPellets = 10;
+            pelletCount = 10;
             attackInterval = 0.625; // ~42 ticks
             clipSize = 6;
-            reloadTimeFirst = 1.005; // 67 ticks for Soldier
-            reloadTimeConsecutive = 0.51; // 34 ticks
+            reloadFirst = 1.005; // 67 ticks for Soldier
+            reloadConsecutive = 0.51; // 34 ticks
             doesFullReload = false;
         }
 };
@@ -154,7 +208,7 @@ class Shovel: public Weapon {
         Shovel() {
             weaponName = "Shovel";
             baseDamage = 65;
-            numOfPellets = 1;
+            pelletCount = 1;
             attackInterval = 0.8; // ~53 ticks
         }
 };
@@ -168,11 +222,11 @@ class GrenadeLauncher: public ClippedWeapon {
         GrenadeLauncher() {
             weaponName = "Grenade Launcher";
             baseDamage = 100;
-            numOfPellets = 1;
+            pelletCount = 1;
             attackInterval = 0.6; // 40 ticks
             clipSize = 4;
-            reloadTimeFirst = 1.24; // ~83 ticks
-            reloadTimeConsecutive = 0.6; // 40 ticks
+            reloadFirst = 1.24; // ~83 ticks
+            reloadConsecutive = 0.6; // 40 ticks
             doesFullReload = false;
         }
 };
@@ -186,11 +240,11 @@ class StickybombLauncher: public ClippedWeapon {
         StickybombLauncher() {
             weaponName = "Stickybomb Launcher";
             baseDamage = 120;
-            numOfPellets = 1;
+            pelletCount = 1;
             attackInterval = 0.6; // 40 ticks
             clipSize = 8;
-            reloadTimeFirst = 1.09; // ~73 ticks
-            reloadTimeConsecutive = 0.67; // ~45 ticks
+            reloadFirst = 1.09; // ~73 ticks
+            reloadConsecutive = 0.67; // ~45 ticks
             doesFullReload = false;
         }
 };
@@ -204,7 +258,7 @@ class Minigun: public Weapon {
         Minigun() {
             weaponName = "Minigun";
             baseDamage = 9;
-            numOfPellets = 4;
+            pelletCount = 4;
             attackInterval = 0.105; // 7 ticks
         }
 };
@@ -218,10 +272,10 @@ class SyringeGun: public ClippedWeapon {
         SyringeGun() {
             weaponName = "Syringe Gun";
             baseDamage = 10;
-            numOfPellets = 1;
+            pelletCount = 1;
             attackInterval = 0.105; // 7 ticks
             clipSize = 40;
-            reloadTimeFirst = 1.305; // 87 ticks
+            reloadFirst = 1.305; // 87 ticks
             doesFullReload = true;
         }
 };
@@ -235,7 +289,7 @@ class SniperRifle: public Weapon {
         SniperRifle() {
             weaponName = "Sniper Rifle";
             baseDamage = 50;
-            numOfPellets = 1;
+            pelletCount = 1;
             attackInterval = 1.5; // 100 ticks
         }
 };
@@ -249,10 +303,10 @@ class SMG: public ClippedWeapon {
         SMG() {
             weaponName = "SMG";
             baseDamage = 8;
-            numOfPellets = 1;
+            pelletCount = 1;
             attackInterval = 0.105; // 7 ticks
             clipSize = 25;
-            reloadTimeFirst = 1.1; // ~73 ticks
+            reloadFirst = 1.1; // ~73 ticks
             doesFullReload = true;
         }
 };
@@ -266,10 +320,10 @@ class Revolver: public ClippedWeapon {
         Revolver() {
             weaponName = "Revolver";
             baseDamage = 40;
-            numOfPellets = 1;
+            pelletCount = 1;
             attackInterval = 0.5; // ~33 ticks
             clipSize = 6;
-            reloadTimeFirst = 1.133; // ~75 ticks
+            reloadFirst = 1.133; // ~75 ticks
             doesFullReload = true;
         }
 };
