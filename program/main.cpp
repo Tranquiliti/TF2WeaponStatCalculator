@@ -7,20 +7,23 @@
 int main() {
     // Scattergun
     Scattergun dummy;
-    dummy.modifyClipSize(200);
-    dummy.modifyAttackInterval(70);
-    dummy.modifyReload(65);
-    dummy.modifyBaseDamage(-40);
+    dummy.modifyClipSize(200);      // +200% clip size
+    dummy.modifyAttackInterval(70); // +70% faster firing speed
+    dummy.modifyReload(65);         // 65% faster reload time
+    dummy.modifyBaseDamage(-40);    // -40% damage penalty
     cout<<dummy.getWeaponStats() + "\n";
 
+    /*
+        Example below creates a clipped weapon with initial stats:
+        Base Damage          - 6 / pellet
+        Attack Interval      - 0.625 s
+        Pellet count         - 10
+        Clip size            - 6
+        Reload (First)       - 1.4333 s
+        Reload (Consecutive) - 0 s
+        Fully reloads all ammo in clip
+    */
     // Force-A-Nature
-    // 6 damage (per pellet)
-    // 0.625 attack interval (in seconds)
-    // 10 pellets
-    // 6 ammo in clip
-    // 1.4333 first reload time (in seconds)
-    // 0 consecutive reload time (in seconds)
-    // Fully reloads all ammo in clip
     ClippedWeapon forceANature("Force-A-Nature", 6, 0.625, 10,
         6, 1.4333, 0, true);
     forceANature.modifyClipSize(400);
@@ -95,9 +98,9 @@ int main() {
     cout<<prettyBoy.getWeaponStats() + "\n";
     
     // Bat
-    // 35 damage
-    // 0.5 attack interval
-    // 1 pellet (or hit) per swing
+    // Base Damage: 35
+    // Attack Interval: 0.5
+    // Pellet Count: 1
     Weapon bat("Bat", 35, 0.5, 1);
     cout<<bat.getWeaponStats() + "\n";
     
@@ -116,8 +119,8 @@ int main() {
     // Black Box
     RocketLauncher blackBox;
     blackBox.setWeaponName("Black Box");
-    blackBox.modifyClipSize(50);
     blackBox.modifyClipSize(-25);
+    blackBox.modifyClipSize(50);
     cout<<blackBox.getWeaponStats() + "\n";
 
     // Liberty Launcher
@@ -178,21 +181,21 @@ int main() {
     cout<<knight.getWeaponStats() + "\n";
     
     // Grenade Launcher
-    GrenadeLauncher iDid;
-    iDid.modifyReload(50);
-    cout<<iDid.getWeaponStats() + "\n";
+    GrenadeLauncher iDidIt;
+    iDidIt.modifyReload(50);
+    cout<<iDidIt.getWeaponStats() + "\n";
 
     // Loch-N-Load
-    GrenadeLauncher lnl;
-    lnl.setWeaponName("Loch-N-Load");
-    lnl.modifyReload(50);
-    lnl.modifyAttackInterval(25);
-    cout<<lnl.getWeaponStats() + "\n";
+    GrenadeLauncher loch;
+    loch.setWeaponName("Loch-N-Load");
+    loch.modifyReload(50);
+    loch.modifyAttackInterval(25);
+    cout<<loch.getWeaponStats() + "\n";
 
     // Stickybomb Launcher
-    StickybombLauncher itLikeThis;
-    itLikeThis.modifyReload(50);
-    cout<<itLikeThis.getWeaponStats() + "\n";
+    StickybombLauncher likeThis;
+    likeThis.modifyReload(50);
+    cout<<likeThis.getWeaponStats() + "\n";
 
     // Scottish Resistance
     StickybombLauncher scottish;
