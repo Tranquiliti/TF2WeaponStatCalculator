@@ -5,13 +5,15 @@
 
 
 int main() {
+    WeaponManager weaponMan; // Manages weapons
+
     // Scattergun
     Scattergun dummy;
     dummy.modifyClipSize(200);      // +200% clip size
     dummy.modifyAttackInterval(70); // +70% faster firing speed
     dummy.modifyReload(65);         // 65% faster reload time
     dummy.modifyBaseDamage(-40);    // -40% damage penalty
-    cout<<dummy.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&dummy); // Needed to print weapon stats
 
     /*
         Example below creates a clipped weapon with initial stats:
@@ -30,14 +32,14 @@ int main() {
     forceANature.modifyAttackInterval(80);
     forceANature.modifyBaseDamage(-40);
     forceANature.modifyClipSize(-66);
-    cout<<forceANature.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&forceANature); 
 
     // Shortstop
     ClippedWeapon shortstop("Shortstop", 12, 0.36, 4,
         4, 1.52, 0, true);
     shortstop.modifyClipSize(100);
     shortstop.modifyAttackInterval(50);
-    cout<<shortstop.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&shortstop);
 
     // Soda Popper
     ClippedWeapon sodaPopper("Soda Popper", 6, 0.625, 10,
@@ -48,7 +50,7 @@ int main() {
     sodaPopper.modifyPelletCount(-50);   // -50% bullets per shot
     sodaPopper.modifyReload(25);         // 25% faster reload time
     sodaPopper.modifyClipSize(-66);      // -66% clip size
-    cout<<sodaPopper.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&sodaPopper);
 
     // Baby Face's Blaster
     Scattergun babyFace;
@@ -56,7 +58,7 @@ int main() {
     babyFace.modifyBaseDamage(-40);
     babyFace.modifyAttackInterval(70);
     babyFace.modifyReload(65);
-    cout<<babyFace.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&babyFace);
 
     // Back Scatter
     Scattergun backScatter;
@@ -67,7 +69,7 @@ int main() {
     backScatter.modifyPelletCount(50);
     backScatter.modifyReload(65);
     backScatter.modifyClipSize(-34);
-    cout<<backScatter.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&backScatter);
 
     // Pistol
     Pistol gotta;
@@ -75,7 +77,7 @@ int main() {
     gotta.modifyClipSize(500);
     gotta.modifyAttackInterval(33);
     gotta.modifyReload(-47);
-    cout<<gotta.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&gotta);
 
     // Winger
     Pistol winger;
@@ -85,7 +87,7 @@ int main() {
     winger.modifyAttackInterval(33);
     winger.modifyClipSize(-60);
     winger.modifyReload(-65);
-    cout<<winger.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&winger);
 
     // Pretty Boy's Pocket Pistol
     Pistol prettyBoy;
@@ -95,33 +97,33 @@ int main() {
     prettyBoy.modifyAttackInterval(33);
     prettyBoy.modifyReload(-47);
     prettyBoy.modifyClipSize(-25);
-    cout<<prettyBoy.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&prettyBoy);
     
     // Bat
     // Base Damage: 35
     // Attack Interval: 0.5
     // Pellet Count: 1
     Weapon bat("Bat", 35, 0.5, 1);
-    cout<<bat.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&bat);
     
     // Rocket Launcher
     RocketLauncher blam;
     blam.modifyClipSize(50);
-    cout<<blam.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&blam);
 
     // Direct Hit
     RocketLauncher directHit;
     directHit.setWeaponName("Direct Hit");
     directHit.modifyBaseDamage(25);
     directHit.modifyClipSize(50);
-    cout<<directHit.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&directHit);
 
     // Black Box
     RocketLauncher blackBox;
     blackBox.setWeaponName("Black Box");
     blackBox.modifyClipSize(-25);
     blackBox.modifyClipSize(50);
-    cout<<blackBox.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&blackBox);
 
     // Liberty Launcher
     RocketLauncher liberty;
@@ -130,14 +132,14 @@ int main() {
     liberty.modifyBaseDamage(-25);
     liberty.modifyAttackInterval(-15);
     liberty.modifyReload(-25);
-    cout<<liberty.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&liberty);
 
     // Cow Mangler 5000
     RocketLauncher cow;
     cow.setWeaponName("Cow Mangler 5000");
     cow.modifyReload(60);
     cow.modifyAttackInterval(-25);
-    cout<<cow.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&cow);
 
     // Air Strike
     RocketLauncher air;
@@ -145,7 +147,7 @@ int main() {
     air.modifyClipSize(100);
     air.modifyAttackInterval(40);
     air.modifyBaseDamage(-15);
-    cout<<air.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&air);
 
     // Shotgun
     Shotgun shotty;
@@ -153,7 +155,7 @@ int main() {
     shotty.modifyAttackInterval(70);
     shotty.modifyClipSize(200);
     shotty.modifyReload(60);
-    cout<<shotty.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&shotty);
 
     // Panic Attack
     Shotgun panic;
@@ -164,7 +166,7 @@ int main() {
     panic.modifyPelletCount(50);
     panic.modifyReload(60);
     panic.modifyBaseDamage(-20);
-    cout<<panic.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&panic);
 
     // Reserve Shooter
     Shotgun reserve;
@@ -174,28 +176,28 @@ int main() {
     reserve.modifyClipSize(200);
     reserve.modifyReload(60);
     reserve.modifyClipSize(-34);
-    cout<<reserve.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&reserve);
     
     // Shovel
     Shovel knight;
-    cout<<knight.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&knight);
     
     // Grenade Launcher
     GrenadeLauncher iDidIt;
     iDidIt.modifyReload(50);
-    cout<<iDidIt.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&iDidIt);
 
     // Loch-N-Load
     GrenadeLauncher loch;
     loch.setWeaponName("Loch-N-Load");
     loch.modifyReload(50);
     loch.modifyAttackInterval(25);
-    cout<<loch.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&loch);
 
     // Stickybomb Launcher
     StickybombLauncher likeThis;
     likeThis.modifyReload(50);
-    cout<<likeThis.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&likeThis);
 
     // Scottish Resistance
     StickybombLauncher scottish;
@@ -204,7 +206,7 @@ int main() {
     scottish.modifyClipSize(50);
     scottish.modifyAttackInterval(50);
     scottish.modifyReload(35);
-    cout<<scottish.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&scottish);
 
     // Quickiebomb Launcher
     StickybombLauncher quickie;
@@ -214,12 +216,12 @@ int main() {
     quickie.modifyReload(20);
     quickie.modifyBaseDamage(-5);
     quickie.modifyClipSize(-50);
-    cout<<quickie.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&quickie);
     
     // Minigun
     Minigun hoovy;
     hoovy.modifyAttackInterval(-5);
-    cout<<hoovy.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&hoovy);
 
     // Natascha
     Minigun natascha;
@@ -227,20 +229,20 @@ int main() {
     natascha.modifyAttackInterval(25);
     natascha.modifyPelletCount(25);
     natascha.modifyBaseDamage(-44);
-    cout<<natascha.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&natascha);
 
     // Brass Beast
     Minigun brass;
     brass.setWeaponName("Brass Beast");
     brass.modifyBaseDamage(10);
     brass.modifyAttackInterval(10);
-    cout<<brass.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&brass);
 
     // Tomislav
     Minigun tomi;
     tomi.setWeaponName("Tomislav");
     tomi.modifyAttackInterval(-25);
-    cout<<tomi.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&tomi);
 
     // Huo-Long Heater
     Minigun heater;
@@ -248,7 +250,7 @@ int main() {
     heater.modifyAttackInterval(25);
     heater.modifyPelletCount(25);
     heater.modifyBaseDamage(-20);
-    cout<<heater.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&heater);
 
     // Family Business
     Shotgun family;
@@ -257,7 +259,7 @@ int main() {
     family.modifyAttackInterval(75);
     family.modifyReload(40);
     family.modifyBaseDamage(-30);
-    cout<<family.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&family);
     
     // Frontier Justice
     Shotgun frontier;
@@ -268,11 +270,11 @@ int main() {
     frontier.modifyAttackInterval(55);
     frontier.modifyPelletCount(25);
     frontier.modifyReload(40);
-    cout<<frontier.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&frontier);
     
     // Sniper Rifle
     SniperRifle awp;
-    cout<<awp.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&awp);
     
     // SMG
     SMG submarine;
@@ -280,7 +282,7 @@ int main() {
     submarine.modifyAttackInterval(20);
     submarine.modifyClipSize(200);
     submarine.modifyReload(-82);
-    cout<<submarine.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&submarine);
 
     // Cleaner's Carbine
     SMG cleaner;
@@ -290,14 +292,14 @@ int main() {
     cleaner.modifyAttackInterval(20);
     cleaner.modifyClipSize(-20);
     cleaner.modifyAttackInterval(-25);
-    cout<<cleaner.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&cleaner);
     
     // Syringe Gun
     SyringeGun medicine;
     medicine.modifyBaseDamage(100);
     medicine.modifyClipSize(100);
     medicine.modifyReload(-25);
-    cout<<medicine.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&medicine);
 
     // Blutsauger
     SyringeGun bluts;
@@ -306,7 +308,7 @@ int main() {
     bluts.modifyClipSize(50);
     bluts.modifyAttackInterval(15);
     bluts.modifyReload(-75);
-    cout<<bluts.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&bluts);
 
     // Overdose
     SyringeGun overdose;
@@ -315,13 +317,13 @@ int main() {
     overdose.modifyClipSize(50);
     overdose.modifyAttackInterval(-15);
     overdose.modifyReload(-25);
-    cout<<overdose.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&overdose);
     
     // Revolver
     Revolver ocelot;
     ocelot.modifyClipSize(300);
     ocelot.modifyAttackInterval(75);
-    cout<<ocelot.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&ocelot);
 
     // Ambassador
     Revolver amby;
@@ -332,7 +334,7 @@ int main() {
     amby.modifyBaseDamage(-15);
     amby.modifyAttackInterval(-20);
     amby.modifyReload(-50);
-    cout<<amby.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&amby);
 
     // L'Etranger
     Revolver letr;
@@ -340,7 +342,7 @@ int main() {
     letr.modifyClipSize(300);
     letr.modifyAttackInterval(75);
     letr.modifyBaseDamage(-20);
-    cout<<letr.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&letr);
 
     // Enforcer
     Revolver enforcer;
@@ -349,7 +351,7 @@ int main() {
     enforcer.modifyPelletCount(300);
     enforcer.modifyBaseDamage(-80);
     enforcer.modifyAttackInterval(75);
-    cout<<enforcer.getWeaponStats() + "\n";
+    weaponMan.addWeapon(&enforcer);
 
     // Diamondback
     Revolver diamond;
@@ -357,7 +359,13 @@ int main() {
     diamond.modifyClipSize(300);
     diamond.modifyAttackInterval(75);
     diamond.modifyBaseDamage(-15);
-    cout<<diamond.getWeaponStats();
+    weaponMan.addWeapon(&diamond);
+
+    // Sort options: Name, AttackInterval, NonstopDPS, RealDPS
+    //weaponMan.sort(WeaponManager::Name); // Sort by Name
+    weaponMan.sort(WeaponManager::RealDPS); // Sort by Real DPS
+    //cout<<weaponMan.printWeaponDPS(); // Print all weapon DPS stats
+    cout<<weaponMan.printWeaponStats();
 
     return 0;
 }
