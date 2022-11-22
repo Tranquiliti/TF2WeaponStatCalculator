@@ -3,7 +3,7 @@
 #include "weapons.h"
 
 
-double tickRound(double num) {
+const double tickRound(double num) {
     return round(num / SECONDS_PER_TICK) * SECONDS_PER_TICK;
 }
 
@@ -20,17 +20,22 @@ Weapon::Weapon(string weaponName, double baseDamage,
 }
 
 
-double Weapon::getBaseDamage() {
+const string Weapon::getWeaponName() {
+    return weaponName;
+}
+
+
+const double Weapon::getBaseDamage() {
     return baseDamage;
 }
 
 
-double Weapon::getAttackInterval() {
+const double Weapon::getAttackInterval() {
     return attackInterval;
 }
 
 
-int Weapon::getPelletCount(){
+const int Weapon::getPelletCount(){
     return pelletCount;
 }
 
@@ -56,7 +61,7 @@ void Weapon::modifyPelletCount(int percent) {
 }
 
 
-string Weapon::getWeaponStats() {
+const string Weapon::getWeaponStats() {
     return "--- " + weaponName +
         " ---\nDamage per shot: " + to_string(baseDamage * pelletCount) +
         "\nAttack Interval: " + to_string(attackInterval) +
@@ -64,7 +69,7 @@ string Weapon::getWeaponStats() {
 }
 
 
-double Weapon::getDPS() {
+const double Weapon::getDPS() {
     return baseDamage * pelletCount / attackInterval;
 }
 
@@ -84,17 +89,17 @@ ClippedWeapon::ClippedWeapon(string weaponName, double baseDamage,
 }
 
 
-double ClippedWeapon::getClipSize() {
+const double ClippedWeapon::getClipSize() {
     return clipSize;
 }
 
 
-double ClippedWeapon::getFirstReload() {
+const double ClippedWeapon::getFirstReload() {
     return reloadFirst;
 }
 
 
-double ClippedWeapon::getConsecutiveReload() {
+const double ClippedWeapon::getConsecutiveReload() {
     return doesFullReload ? 0 : reloadConsecutive;
 }
 
@@ -112,7 +117,7 @@ void ClippedWeapon::modifyReload(int percent) {
 }
 
 
-string ClippedWeapon::getWeaponStats() {
+const string ClippedWeapon::getWeaponStats() {
     string reloadStat = doesFullReload ?
         "\nReload: " + to_string(reloadFirst) :
         "\nReload (First): " + to_string(reloadFirst) +
@@ -126,18 +131,85 @@ string ClippedWeapon::getWeaponStats() {
 }
 
 
-double ClippedWeapon::getEmptyClipTime() {
+const double ClippedWeapon::getEmptyClipTime() {
     return attackInterval * clipSize;
 }
 
 
-double ClippedWeapon::getFullReloadTime() {
+const double ClippedWeapon::getFullReloadTime() {
     return doesFullReload ? reloadFirst :
         reloadFirst + reloadConsecutive * (clipSize - 1);
 }
 
 
-double ClippedWeapon::getRealDPS() {
+const double ClippedWeapon::getRealDPS() {
     double emptyTime = getEmptyClipTime();
     return Weapon::getDPS() * (emptyTime/(emptyTime+getFullReloadTime()));
+}
+
+
+WeaponManager::WeaponManager() {
+    weapons = vector<Weapon*>();
+}
+
+
+void WeaponManager::addWeapon(Weapon* wep) {
+    weapons.emplace_back(wep);
+}
+
+
+const string WeaponManager::printWeaponStats() {
+    string output = "";
+    for(Weapon* wep : weapons) {
+        output += wep->getWeaponStats() + "\n";
+    }
+    return output;
+}
+
+
+const string WeaponManager::printWeaponDPS() {
+    string output = "";
+    for(Weapon* wep : weapons) {
+        output += "--- " + wep->getWeaponName() +
+            " ---\nNonstop DPS: " + to_string(wep->getDPS());
+        auto* isClipped = dynamic_cast<ClippedWeapon*>(wep);
+        if(isClipped) {
+            output += "\nReal DPS: " + to_string(isClipped->getRealDPS());
+        }
+        output += "\n\n";
+    }
+    return output;
+}
+
+
+void WeaponManager::sort(SortType stat) {
+    switch(stat) {
+        case Name: // Sort in ascending order
+            std::sort(weapons.begin(), weapons.end(),
+                      [](Weapon* w1, Weapon* w2) {
+                        return w1->getWeaponName() < w2->getWeaponName();
+                      });
+            break;
+        case AttackInterval: // Sort in descending order
+            std::sort(weapons.begin(), weapons.end(),
+                      [](Weapon* w1, Weapon* w2) {
+                        return w1->getAttackInterval() > w2->getAttackInterval();
+                      });
+            break;
+        case NonstopDPS: // Sort in descending order
+            std::sort(weapons.begin(), weapons.end(),
+                      [](Weapon* w1, Weapon* w2)
+                      {return w1->getDPS() > w2->getDPS();});
+            break;
+        case RealDPS: // Sort in descending order
+            std::sort(weapons.begin(), weapons.end(),
+                      [](Weapon* w1, Weapon* w2) {
+                        auto* nw1 = dynamic_cast<ClippedWeapon*>(w1);
+                        double nw1DPS = nw1 ? nw1->getRealDPS() : w1->getDPS();
+                        auto* nw2 = dynamic_cast<ClippedWeapon*>(w2);
+                        double nw2DPS = nw2 ? nw2->getRealDPS() : w2->getDPS();
+                        return nw1DPS > nw2DPS;
+                      });
+            break;
+    }
 }

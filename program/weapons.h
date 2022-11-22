@@ -1,7 +1,9 @@
 //======== Made by Tranquility =======//
 
-#include <string>
+#include <algorithm>
 #include <cmath>
+#include <string>
+#include <vector>
 
 using namespace std;
 
@@ -13,7 +15,7 @@ const double SECONDS_PER_TICK = 0.015;
 /*
     Rounds a number to the nearest TF2 server tick
 */
-double tickRound(double num);
+const double tickRound(double num);
 
 
 /*
@@ -26,7 +28,7 @@ class Weapon {
         double attackInterval; // in seconds
         int    pelletCount;
         
-        Weapon();
+        Weapon(); // Default constructor
     
     public:
         /*
@@ -35,9 +37,10 @@ class Weapon {
         Weapon(string weaponName, double baseDamage,
                double attackInterval, int pelletCount);
 
-        double getBaseDamage();
-        double getAttackInterval();
-        int    getPelletCount();
+        const string getWeaponName();
+        const double getBaseDamage();
+        const double getAttackInterval();
+        const int    getPelletCount();
 
         void setWeaponName(string newName);
 
@@ -59,12 +62,12 @@ class Weapon {
         */
         void modifyPelletCount(int percent);
         
-        string getWeaponStats();
+        virtual const string getWeaponStats();
 
         /*
             Returns this Weapon's DPS, assuming nonstop firing
         */
-        double getDPS();
+        const double getDPS();
 };
 
 
@@ -78,7 +81,7 @@ class ClippedWeapon: public Weapon {
         double reloadConsecutive; // in seconds
         bool   doesFullReload;
         
-        ClippedWeapon();
+        ClippedWeapon(); // Default constructor
         
     public:
         /*
@@ -89,9 +92,9 @@ class ClippedWeapon: public Weapon {
                       int clipSize, double reloadFirst,
                       double reloadConsecutive, bool doesFullReload);
 
-        double getClipSize();
-        double getFirstReload();
-        double getConsecutiveReload(); // Returns 0 if weapon does full reloads
+        const double getClipSize();
+        const double getFirstReload();
+        const double getConsecutiveReload(); // Returns 0 if weapon does full reloads
         
         /*
             Changes clip size by a percentage,
@@ -106,22 +109,57 @@ class ClippedWeapon: public Weapon {
         */
         void modifyReload(int percent);
         
-        string getWeaponStats();
+        const string getWeaponStats();
 
         /*
             Returns the time (in seconds) to empty this Weapon's clip
         */
-        double getEmptyClipTime();
+        const double getEmptyClipTime();
 
         /*
             Returns the time (in seconds) to fully reload this Weapon
         */
-        double getFullReloadTime();
+        const double getFullReloadTime();
 
         /*
             Returns this Weapon's DPS, taking reloading into account
         */
-        double getRealDPS();
+        const double getRealDPS();
+};
+
+
+/*
+    Manages a list of weapons
+*/
+class WeaponManager {
+    private:
+        vector<Weapon*> weapons;
+
+    public:
+        // Attributes used to sort weapons
+        enum SortType{Name,AttackInterval,NonstopDPS,RealDPS};
+
+        WeaponManager(); // Constructs the weapon manager
+
+        /*
+            Adds a Weapon to this Manager
+        */
+        void addWeapon(Weapon* wep);
+
+        /*
+            Outputs the stats of all weapons stored in this Manager
+        */
+        const string printWeaponStats();
+
+        /*
+            Outputs the DPS stats of all weapons stored in this Manager
+        */
+        const string printWeaponDPS();
+
+        /*
+            Sorts weapons by a specified criterion
+        */
+        void sort(SortType stat);
 };
 
 
