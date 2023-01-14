@@ -4,7 +4,7 @@
 
 
 const double tickRound(double num) {
-    return round(num / SECONDS_PER_TICK) * SECONDS_PER_TICK;
+    return ceil(num / SECONDS_PER_TICK) * SECONDS_PER_TICK;
 }
 
 
