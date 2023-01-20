@@ -4,7 +4,7 @@
 
 
 const float tickRound(float num) {
-    return ceil(roundTo(num / SECONDS_PER_TICK, 3)) * SECONDS_PER_TICK;
+    return ceil(roundTo(num / SECONDS_PER_TICK, 5)) * SECONDS_PER_TICK;
 }
 
 
