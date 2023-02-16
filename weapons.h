@@ -7,15 +7,6 @@
 
 using namespace std;
 
-/*
-Putting testing notes here before I forget:
-Damage is internally stored as a floating point number
-First, pellet count (which is floored) multiplies the damage, keeping the decimal intact
-Then, the total shot damage is floored (e.g 9.9 * 4 = 39.6 ~= 39)
-Then, damage falloff/ramp-up modifies the floored number, rounding to the nearest integer
-
-(Testing done against the Horseless Headless Horsemann, so this may not accurately apply to func_breakables or robot Tanks)
-*/
 
 // TF2 servers usually run at 15 milliseconds per server clock tick
 // Therefore, there are 66.666... server ticks per second
@@ -118,7 +109,7 @@ class ClippedWeapon: public Weapon {
         void modifyClipSize(float percent);
 
         /*
-            Changes first and consecutive reload times by a percentage,
+            Changes first and consecutive reload times by a percentage
         */
         void modifyReload(float percent);
         
@@ -142,7 +133,51 @@ class ClippedWeapon: public Weapon {
 
 
 /*
-    Manages a list of weapons
+    Sniper Rifle used by Sniper (Sniping's a good job, mate!)
+*/
+class SniperRifle: public Weapon {
+    protected:
+        float timeToFullCharge;
+        float chargeMultiplier;
+
+    public:
+        SniperRifle() {
+            weaponName = "Sniper Rifle";
+            baseDamage = 50;
+            pelletCount = 1;
+            attackInterval = 1.5; // 100 ticks
+            timeToFullCharge = 3;
+            chargeMultiplier = 3;
+        }
+
+        const float getFullChargeTime();
+
+        /*
+            Changes full charge time by a percentage
+        */
+        void modifyFullChargeTime(float percent);
+
+        /*
+            Changes damage multiplier on full-charge by a percentage
+        */
+        void modifyChargeMultiplier(float percent);
+
+        const string getWeaponStats();
+
+        /*
+            Returns the damage on a full-charged shot
+        */
+        const float getChargedDamage();
+
+        /*
+            Returns this Weapon's DPS, assuming all shots are full-charged shots.
+        */
+        const float getChargedDPS();
+};
+
+
+/*
+    Manages a list of Weapons
 */
 class WeaponManager {
     private:
@@ -266,6 +301,20 @@ class Shovel: public Weapon {
 
 
 /*
+    Flare Gun used by the mentally-insane Pyro
+*/
+class FlareGun: public Weapon {
+    public:
+        FlareGun() {
+            weaponName = "Flare Gun",
+            baseDamage = 30;
+            pelletCount = 1;
+            attackInterval = 2; // ~133 ticks
+        }
+};
+
+
+/*
     Grenade Launcher used by a drunk Demoman
 */
 class GrenadeLauncher: public ClippedWeapon {
@@ -328,20 +377,6 @@ class SyringeGun: public ClippedWeapon {
             clipSize = 40;
             reloadFirst = 1.305; // 87 ticks
             doesFullReload = true;
-        }
-};
-
-
-/*
-    Sniper Rifle used by Sniper (Sniping's a good job, mate!)
-*/
-class SniperRifle: public Weapon {
-    public:
-        SniperRifle() {
-            weaponName = "Sniper Rifle";
-            baseDamage = 50;
-            pelletCount = 1;
-            attackInterval = 1.5; // 100 ticks
         }
 };
 

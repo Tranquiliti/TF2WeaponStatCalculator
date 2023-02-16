@@ -4,7 +4,7 @@
 
 
 const float tickRound(float num) {
-    return ceil(roundTo(num / SECONDS_PER_TICK, 5)) * SECONDS_PER_TICK;
+    return ceil(roundTo(num / SECONDS_PER_TICK, 3)) * SECONDS_PER_TICK;
 }
 
 
@@ -44,7 +44,6 @@ const float Weapon::getAttackInterval() {
 const float Weapon::getPelletCount() {
     return pelletCount;
 }
-
 
 
 const int Weapon::getDamagePerShot() {
@@ -159,6 +158,39 @@ const float ClippedWeapon::getRealDPS() {
 }
 
 
+const float SniperRifle::getFullChargeTime() {
+    return timeToFullCharge + 0.3;
+}
+
+
+void SniperRifle::modifyFullChargeTime(float percent) {
+    timeToFullCharge = timeToFullCharge / (1.0 + percent/100.0);
+}
+
+
+void SniperRifle::modifyChargeMultiplier(float percent) {
+    chargeMultiplier = chargeMultiplier * (1.0 + percent/100.0);
+}
+
+
+const string SniperRifle::getWeaponStats() {
+    return Weapon::getWeaponStats() +
+        "Damage on Full Charge: " + to_string(getChargedDamage()) +
+        "\nTime To Full Charge: " + to_string(getFullChargeTime()) +
+        "\nCharged DPS: " + to_string(getChargedDPS()) + "\n";
+}
+
+
+const float SniperRifle::getChargedDamage() {
+    return getDamagePerShot() * chargeMultiplier;
+}
+
+
+const float SniperRifle::getChargedDPS() {
+    return getChargedDamage() / (getFullChargeTime() + tickRound(attackInterval));
+}
+
+
 WeaponManager::WeaponManager() {
     weapons = vector<Weapon*>();
 }
@@ -187,6 +219,11 @@ const string WeaponManager::printWeaponDPS() {
         auto* isClipped = dynamic_cast<ClippedWeapon*>(wep);
         if(isClipped) {
             output += "\nReal DPS: " + to_string(isClipped->getRealDPS());
+        }
+
+        auto* isRifled = dynamic_cast<SniperRifle*>(wep);
+        if(isRifled) {
+            output += "\nCharged DPS: " + to_string(isRifled->getChargedDPS());
         }
 
         output += "\n\n";

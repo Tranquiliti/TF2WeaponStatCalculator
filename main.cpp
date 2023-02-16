@@ -48,11 +48,11 @@ int main() {
     // Soda Popper
     ClippedWeapon sodaPopper("Soda Popper",
         6, 0.625, 10, 6, 1.4333, 0, true);
-    sodaPopper.modifyBaseDamage(40);     // +40% damage bonus
-    sodaPopper.modifyClipSize(500);      // +500% clip size
-    sodaPopper.modifyAttackInterval(65); // +65% faster firing speed
-    sodaPopper.modifyPelletCount(-50);   // -50% bullets per shot
-    sodaPopper.modifyReload(25);         // 25% faster reload time
+    sodaPopper.modifyBaseDamage(-50);    // -50% damage penalty
+    sodaPopper.modifyAttackInterval(70); // +70% faster firing speed
+    sodaPopper.modifyClipSize(300);      // +300% clip size
+    sodaPopper.modifyPelletCount(50);    // 50% bullets per shot
+    sodaPopper.modifyReload(50);         // 50% faster reload time
     sodaPopper.modifyClipSize(-66);      // -66% clip size
     weaponMan.addWeapon(&sodaPopper);
 
@@ -115,14 +115,15 @@ int main() {
     RocketLauncher blam;
     blam.modifyBaseDamage(100);
     blam.modifyClipSize(50);
+    blam.modifyReload(25);
     weaponMan.addWeapon(&blam);
 
     // Direct Hit
     RocketLauncher directHit;
     directHit.setWeaponName("Direct Hit");
-    directHit.modifyBaseDamage(100);
-    directHit.modifyBaseDamage(25);
+    directHit.modifyBaseDamage(150);
     directHit.modifyClipSize(50);
+    directHit.modifyReload(25);
     weaponMan.addWeapon(&directHit);
 
     // Black Box
@@ -131,16 +132,15 @@ int main() {
     blackBox.modifyBaseDamage(100);
     blackBox.modifyClipSize(-25);
     blackBox.modifyClipSize(50);
+    blackBox.modifyReload(25);
     weaponMan.addWeapon(&blackBox);
 
     // Liberty Launcher
     RocketLauncher liberty;
     liberty.setWeaponName("Liberty Launcher");
     liberty.modifyClipSize(75);
-    liberty.modifyBaseDamage(-25);
-    liberty.modifyBaseDamage(100);
+    liberty.modifyBaseDamage(50);
     liberty.modifyAttackInterval(-15);
-    liberty.modifyReload(-25);
     weaponMan.addWeapon(&liberty);
 
     // Cow Mangler 5000
@@ -157,7 +157,8 @@ int main() {
     air.modifyClipSize(100);
     air.modifyAttackInterval(40);
     air.modifyBaseDamage(-15);
-    air.modifyBaseDamage(100);
+    air.modifyBaseDamage(70);
+    air.modifyReload(25);
     weaponMan.addWeapon(&air);
 
     // Shotgun
@@ -171,12 +172,11 @@ int main() {
     // Panic Attack
     Shotgun panic;
     panic.setWeaponName("Panic Attack");
-    panic.modifyBaseDamage(-40);
+    panic.modifyBaseDamage(-60);
     panic.modifyClipSize(200);
-    panic.modifyAttackInterval(70);
+    panic.modifyAttackInterval(85);
     panic.modifyPelletCount(50);
-    panic.modifyReload(60);
-    panic.modifyBaseDamage(-20);
+    panic.modifyReload(35);
     weaponMan.addWeapon(&panic);
 
     // Reserve Shooter
@@ -192,6 +192,21 @@ int main() {
     // Shovel
     Shovel knight;
     weaponMan.addWeapon(&knight);
+
+    // Flare Gun
+    FlareGun flair;
+    weaponMan.addWeapon(&flair);
+
+    // Detonator
+    FlareGun detonator;
+    detonator.setWeaponName("Detonator");
+    detonator.modifyBaseDamage(-25);
+    weaponMan.addWeapon(&detonator);
+
+    // Manmelter
+    FlareGun manmelter;
+    manmelter.setWeaponName("Manmelter");
+    weaponMan.addWeapon(&manmelter);
     
     // Grenade Launcher
     GrenadeLauncher iDidIt;
@@ -266,10 +281,9 @@ int main() {
     // Family Business
     Shotgun family;
     family.setWeaponName("Family Business");
-    family.modifyClipSize(300);
-    family.modifyAttackInterval(75);
-    family.modifyReload(40);
-    family.modifyBaseDamage(-30);
+    family.modifyClipSize(500);
+    family.modifyAttackInterval(60);
+    family.modifyReload(50);
     weaponMan.addWeapon(&family);
     
     // Frontier Justice
@@ -285,23 +299,58 @@ int main() {
     
     // Sniper Rifle
     SniperRifle awp;
+    awp.modifyBaseDamage(200);
     weaponMan.addWeapon(&awp);
+
+    // Sydney Sleeper
+    SniperRifle sydney;
+    sydney.setWeaponName("Sydney Sleeper");
+    sydney.modifyBaseDamage(100);
+    sydney.modifyFullChargeTime(-95);
+    sydney.modifyAttackInterval(40);
+    weaponMan.addWeapon(&sydney);
+
+    // Bazaar Bargain
+    SniperRifle bazaar;
+    bazaar.setWeaponName("Bazaar Bargain");
+    bazaar.modifyBaseDamage(500);
+    bazaar.modifyAttackInterval(-100);
+    bazaar.modifyFullChargeTime(100); // Assuming 6+ heads
+    weaponMan.addWeapon(&bazaar);
+
+    // Machina
+    SniperRifle machina;
+    machina.setWeaponName("Machina");
+    machina.modifyBaseDamage(200);
+    machina.modifyAttackInterval(-50);
+    machina.modifyChargeMultiplier(100);
+    weaponMan.addWeapon(&machina);
+
+    // Hitman's Heatmaker
+    SniperRifle hitmans;
+    hitmans.setWeaponName("Hitman's Heatmaker");
+    hitmans.modifyBaseDamage(100);
+    hitmans.modifyAttackInterval(30);
+    weaponMan.addWeapon(&hitmans);
     
+    // Classic
+    SniperRifle classic;
+    classic.setWeaponName("Classic");
+    classic.modifyBaseDamage(100);
+    classic.modifyFullChargeTime(100);
+    weaponMan.addWeapon(&classic);
+
     // SMG
     SMG submarine;
-    submarine.modifyBaseDamage(50);
-    submarine.modifyAttackInterval(20);
+    submarine.modifyBaseDamage(100);
     submarine.modifyClipSize(200);
-    submarine.modifyReload(-82);
+    submarine.modifyReload(-75);
     weaponMan.addWeapon(&submarine);
 
     // Cleaner's Carbine
     SMG cleaner;
     cleaner.setWeaponName("Cleaner's Carbine");
-    cleaner.modifyBaseDamage(100);
-    cleaner.modifyClipSize(100);
-    cleaner.modifyAttackInterval(20);
-    cleaner.modifyClipSize(-20);
+    cleaner.modifyBaseDamage(150);
     cleaner.modifyAttackInterval(-25);
     weaponMan.addWeapon(&cleaner);
     
@@ -359,9 +408,7 @@ int main() {
     Revolver enforcer;
     enforcer.setWeaponName("Enforcer");
     enforcer.modifyClipSize(300);
-    enforcer.modifyPelletCount(300);
-    enforcer.modifyBaseDamage(-80);
-    enforcer.modifyAttackInterval(75);
+    enforcer.modifyAttackInterval(65);
     weaponMan.addWeapon(&enforcer);
 
     // Diamondback
@@ -369,7 +416,8 @@ int main() {
     diamond.setWeaponName("Diamondback");
     diamond.modifyClipSize(300);
     diamond.modifyAttackInterval(75);
-    diamond.modifyBaseDamage(-15);
+    diamond.modifyPelletCount(300);
+    diamond.modifyBaseDamage(-80);
     weaponMan.addWeapon(&diamond);
 
     // Knife
@@ -378,7 +426,7 @@ int main() {
 
     // Sort options: Name, AttackInterval, NonstopDPS, RealDPS
     //weaponMan.sort(WeaponManager::Name); // Sort by Name
-    weaponMan.sort(WeaponManager::RealDPS); // Sort by Real DPS
+    //weaponMan.sort(WeaponManager::RealDPS); // Sort by Real DPS
     //cout<<weaponMan.printWeaponDPS(); // Print all weapon DPS stats
     cout<<weaponMan.printWeaponStats();
 
